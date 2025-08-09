@@ -1,52 +1,42 @@
-#Критерії оцінювання:
-# Реалізовано протокол серіалізації/десеріалізації даних за допомогою pickle
-# Всі дані повинні зберігатися при виході з програми
-# При новому сеансі Адресна книга повинна бути у застосунку, яка була при попередньому запуску.
+from serialization import save_data, load_data # Серіалізація, десеріалізація
+from task1 import AddressBook, Record, add_contact, change_phone, show_phone, show_all, add_birthday, show_birthday, birthdays, greet, exit_program, parse_input
 
-##import pickle
 
-# Приклад об'єкта для серіалізації
-# data_to_serialize = {
-#        'name': 'John',
-#        'age': 30,
-#        'city': 'New York'
-# }
-#
-# # Серіалізація об'єкта в байти
-# serialized_data = pickle.dumps(data_to_serialize)
-# print("Серіалізовані дані:", serialized_data)
-#
-# # Запис серіалізованих даних у файл
-# with open('serialized_data.pkl', 'wb') as file:
-#        pickle.dump(data_to_serialize, file)
-#
-# # Десеріалізація з байтів
-# deserialized_data = pickle.loads(serialized_data)
-# print("Десеріалізовані дані:", deserialized_data)
-#
-# # Читання з файлу та десеріалізація
-# with open('serialized_data.pkl', 'rb') as file:
-# loaded_data = pickle.load(file)
-# print("Дані з файлу:", loaded_data)
-
-import pickle
-
-def save_data(book, filename="addressbook.pkl"):
-    with open(filename, "wb") as f:
-        pickle.dump(book, f)
-
-def load_data(filename="addressbook.pkl"):
-    try:
-        with open(filename, "rb") as f:
-            return pickle.load(f)
-    except FileNotFoundError:
-        return AddressBook()  # Повернення нової адресної книги, якщо файл не знайдено
 def main():
-    book = load_data()
+    book = load_data() #Книга
+    print('Это бот-помощник.')
 
-    # Основний цикл програми
+    while True:
+        user_input = input("Введіть команду: ")
+        command, args = parse_input(user_input)
 
-    save_data(book)  # Викликати перед виходом з програми
+        if command in ['exit', 'close']:
+            save_data(book)
+            print('До побачення')
+            break
 
+        commands = {
+            'hello': greet,
+            'add': add_contact,
+            'change': change_phone,
+            'phone': show_phone,
+            'all': show_all,
+            'add-birthday': add_birthday,
+            'show-birthday': show_birthday,
+            'birthdays': birthdays,
+        }
 
+        handler = commands.get(command)
+        if handler:
+            result = handler(args, book)
+            if result == 'exit':
+                save_data(book)
+                print('До побачення')
+                break
+            print(result)
+        else:
+            print(f'Команда "{command}" не знайдена.')
+
+if __name__ == '__main__':
+    main()
 
