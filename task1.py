@@ -196,38 +196,3 @@ def parse_input(user_input):
     command = parts[0].lower() if parts else ""
     args = parts[1:]
     return command, args
-
-def main():
-    book = AddressBook()
-    print("Вітаю, це бот-помічник!")
-    while True:
-        user_input = input("Введіть команду: ")
-        command, args = parse_input(user_input)
-
-        if command in ["close", "exit"]:
-            print("До побачення")
-            break
-
-        commands = {
-            "hello": greet,
-            "add": add_contact,
-            "change": change_phone,
-            "phone": show_phone,
-            "all": show_all,
-            "add-birthday": add_birthday,
-            "show-birthday": show_birthday,
-            "birthdays": birthdays,
-        }
-
-        handler = commands.get(command)
-        if handler:
-            result = handler(args, book)
-            if result == "exit":
-                print("До побачення")
-                break
-            print(result)
-        else:
-            print("Команду не знайдено")
-
-if __name__ == "__main__":
-    main()
