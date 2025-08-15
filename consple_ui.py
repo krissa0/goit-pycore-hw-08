@@ -15,3 +15,5 @@ class Console2(Console):
 
     def show_result(self, result):
         print(result) # Виводимо результат користувачу
+
+
